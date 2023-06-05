@@ -2973,7 +2973,12 @@ MySrvC *MyHGC::get_random_MySrvC(char * gtid_uuid, uint64_t gtid_trxid, int max_
 #ifdef TEST_AURORA
 				array_mysrvc_cands += num_candidates;
 #endif // TEST_AURORA
-				sess->sticky_backend_hint.insert({this->hid, mysrvc});
+				if (sess->sticky_backend > 0) {
+					sess->sticky_backend_hint.insert({this->hid, mysrvc});
+				} else {
+					sess->sticky_backend_hint.erase(this->hid);
+				}
+
 				return mysrvc;
 			}
 		}
